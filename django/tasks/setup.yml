@@ -1,0 +1,24 @@
+---
+  - name: install mysql-server
+    action: apt name=mysql-server
+    notify:
+      - mysql_secure_installation
+    sudo: True
+
+  - name: write conf.d/mysqld.cnf
+    action: template src=templates/mysqld.cnf.j2 dest=/etc/mysql/conf.d/mysqld.cnf
+    notify:
+      - restart mysql
+    sudo: True
+
+  - name: write conf.d/client.cnf
+    action: template src=templates/client.cnf.j2 dest=/etc/mysql/conf.d/client.cnf
+    notify:
+      - restart mysql
+    sudo: True
+
+  - name: change mysql password
+    when: mysql_root_password is defined
+    action: command mysqladmin -u root password password-1
+    sudo: True
+

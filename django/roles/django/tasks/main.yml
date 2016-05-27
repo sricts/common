@@ -1,0 +1,32 @@
+---
+- name: Install python
+  apt: name=python
+  sudo: True
+
+- name: Install django
+  apt: name=python-django
+  sudo: True
+
+- name: Install pip
+  apt: name=python-pip
+  sudo: True
+
+- name: Upload iManage.zip to /home/iManage.zip
+  copy: src=/home/unameit/Downloads/iManage.zip dest=/home/iManage.zip
+  sudo: True
+
+- name: Unzip iManage
+  action: command unzip /home/iManage.zip -d /home/iManage
+  sudo: True
+
+- name: Execute sql script
+  action: command mysql -u root -ppassword-1 -e "DROP DATABASE IF EXISTS docker_ui";
+  sudo: True
+
+- name: Execute sql script
+  action: command mysql -u root -ppassword-1 -e "CREATE DATABASE docker_ui";
+  sudo: True
+
+- name: Execute sql script
+  action: command mysql -u root docker_ui < /home/iManage/iManage/SQL_DUMP.sql
+  sudo: True

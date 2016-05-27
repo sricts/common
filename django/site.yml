@@ -1,0 +1,18 @@
+---
+# This playbook deploys a simple standalone Tomcat 7 server. 
+
+- hosts: django-servers 
+  remote_user: rdk
+  vars:
+      utf8: true
+      mysqld:
+        bind_address: 127.0.0.1
+        key_buffer: 16M
+      
+  tasks:
+      - include: tasks/setup.yml
+      - include: roles/django/tasks/main.yml
+
+  handlers:
+      - include: handlers/handlers.yml
+
